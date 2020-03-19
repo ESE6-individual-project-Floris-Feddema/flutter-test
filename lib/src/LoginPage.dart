@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -28,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
           gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Theme.of(context).primaryColor, Colors.orange],
+              colors: [Theme.of(context).primaryColor, Colors.blue],
           ),
         ),
         child: Padding(
@@ -206,9 +207,27 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void onSignInPressed(){
+  Future<void> onSignInPressed() async {
     if (!validate()) return;
-    
+    var response = await http.get('https://jsonplaceholder.typicode.com/albums/1');
+
+    if (response.statusCode == 200){
+      final snackbar = SnackBar(
+        content: Text(
+          'succesful request done',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 22,
+          ),
+        ),
+        backgroundColor: Colors.blueGrey,
+        duration: Duration(
+            milliseconds: 3000
+        ),
+      );
+      Scaffold.of(context).showSnackBar(snackbar);
+    }
+
   }
 
   void onSignUpPressed(){
